@@ -17,11 +17,6 @@ export default {
   name: 'App',
   components: {
     Toolbar
-  },
-  computed: {
-    results() {
-      return this.$store.getters.getMovies;
-    }
   }
 }
 </script>
