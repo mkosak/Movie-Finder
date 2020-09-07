@@ -2,11 +2,13 @@
   <div id="app">
     <Toolbar />
 
-    <md-app>
-      <md-app-content>
-        <router-view></router-view>
-      </md-app-content>
-    </md-app>
+    <div>
+      <md-app class="movie-finder-container">
+        <md-app-content>
+          <router-view></router-view>
+        </md-app-content>
+      </md-app>
+    </div>
   </div>
 </template>
 
@@ -22,8 +24,12 @@ export default {
 </script>
 
 <style lang="scss">
-#app {
-  height: 100vh;
+.movie-finder-container {
+  height: calc(100vh - 64px);
   min-width: 480px;
+
+  @media (max-width: 960px) {
+    height: calc(100vh - 48px);
+  }
 }
 </style>

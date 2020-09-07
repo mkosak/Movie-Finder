@@ -6,14 +6,14 @@ Vue.use(Vuex);
 
 // localStorage helpers
 const saveToLocalStorage = (item, value) => {
-  let savedResults = getFromLocalStorage('searchResultsHistory') ? getFromLocalStorage('searchResultsHistory') : [];
+  let savedResults = getFromLocalStorage('searchResultsHistory') || [];
   
   savedResults.push(value);
 
   localStorage.setItem(item, JSON.stringify(savedResults));
 };
 const getFromLocalStorage = (item) => {
-  let res = (localStorage.getItem(item)) ? JSON.parse(localStorage.getItem(item)) : false;
+  let res = localStorage.getItem(item) ? JSON.parse(localStorage.getItem(item)) : false;
 
   return res;
 };
@@ -23,7 +23,8 @@ const state = () => ({
   isLoading: false,
   form: {},
   movies: [],
-  resultsHistory: []
+  resultsHistory: [],
+  errorMsg: ''
 });
 
 // getters
@@ -44,6 +45,9 @@ const getters = {
     } else {
       return getFromLocalStorage('searchResultsHistory');
     }
+  },
+  getErrorMsg: (state) => {
+    return state.error;
   }
 };
 
@@ -59,12 +63,18 @@ const actions = {
     await API.get(`?s=${term}`).then((res) => {
       if (res.data.Search) {
         commit('setMovies', res.data.Search);
+        commit('setError', '');
+      } else {
+        commit('setMovies', '');
+        commit('setError', res.data.Error);
       }
     }).catch((e) => {
       console.log('API has issues', e);
     });
   },
   addResultsHistory({ commit, getters }, results) {
+    if (!results.length) return;
+
     commit('setResultsHistory', { term: getters.getSearchTerm, results });
   },
   addMoveis({ commit }, movies) {
@@ -84,14 +94,15 @@ const mutations = {
     state.movies = movies;
   },
   setResultsHistory(state, history) {
-    if (!history.results.length) return;
-
     const results = { term: history.term, results: history.results };
     state.resultsHistory.push(results);
 
     // save results to localStorage
     saveToLocalStorage('searchResultsHistory', results);
   },
+  setError(state, error) {
+    state.errorMsg = error;
+  }
 };
 
 export default new Vuex.Store({

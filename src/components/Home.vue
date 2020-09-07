@@ -2,7 +2,7 @@
   <div class="movie-finder">
     <md-field @keyup.enter.native="searchMovies">
       <input class="md-input" :value="searchTerm" @input="updateSearchTerm" placeholder="Type to search movie" />
-      <span class="md-helper-text">{{ searchHelperText }}</span>
+      <span class="md-helper-text">{{ searchHelperText || errorMsg }}</span>
       <md-button type="submit" class="md-primary movie-finder__search-button" @click="searchMovies" :disabled="isLoading">SEARCH</md-button>
     </md-field>
 
@@ -48,7 +48,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['form']),
+    ...mapState(['form', 'errorMsg']),
     searchTerm: {
       set(searchTerm) {
         this.$store.commit('addForm', { searchTerm });
@@ -85,7 +85,7 @@ export default {
         this.$store.dispatch('addForm', term);
 
         // search movies
-        const results = await this.$store.dispatch('searchMovies', term);
+        await this.$store.dispatch('searchMovies', term);
 
         // save search result
         this.$store.dispatch('addResultsHistory', this.getMovies);
@@ -125,7 +125,7 @@ export default {
     padding: 2rem 0;
   }
   &__search-history {
-    margin: 2rem 0;
+    margin: 3rem 0;
     
     &__button {
       margin-left: -24px;
