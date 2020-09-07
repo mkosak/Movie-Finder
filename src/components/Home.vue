@@ -1,9 +1,17 @@
 <template>
   <div class="movie-finder">
     <md-field @keyup.enter.native="searchMovies">
-      <input class="md-input" :value="searchTerm" @input="updateSearchTerm" placeholder="Type to search movie" />
+      <input 
+        class="md-input" 
+        :value="searchTerm" 
+        @input="updateSearchTerm" 
+        placeholder="Type to search movie" />
       <span class="md-helper-text">{{ searchHelperText || errorMsg }}</span>
-      <md-button type="submit" class="md-primary movie-finder__search-button" @click="searchMovies" :disabled="isLoading">SEARCH</md-button>
+      <md-button 
+        type="submit" 
+        class="md-primary movie-finder__search-button" 
+        @click="searchMovies" 
+        :disabled="isLoading">SEARCH</md-button>
     </md-field>
 
     <div class="movie-finder__spinner" v-show="isLoading">
@@ -27,9 +35,9 @@
           <md-table-cell>{{ history.results.length }}</md-table-cell>
           <md-table-cell>
             <md-button 
-                type="submit" 
-                class="md-primary movie-finder__search-history__button" 
-                @click="showResults(history.term)">SHOW</md-button>
+              type="submit" 
+              class="md-primary movie-finder__search-history__button" 
+              @click="showResults(history.term)">SHOW</md-button>
           </md-table-cell>
         </md-table-row>
       </md-table>

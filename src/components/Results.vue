@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="moviesList.length">
-      <carousel :scrollPerPage="true" :perPageCustom="[[480, 1], [768, 2], [1160, 3], [1433, 4], [1920, 5]]">
+      <carousel :scrollPerPage="true" :perPageCustom="carouselResponsive">
         <slide v-for="movie in moviesList" :key="movie.id">
           <MovieCard :item="movie" />
         </slide>
@@ -24,6 +24,11 @@ import MovieCard from './MovieCard.vue';
 
 export default {
   name: 'Results',
+  data() {
+    return {
+      carouselResponsive: [[480, 1], [768, 2], [1160, 3], [1433, 4], [1920, 5]]
+    }
+  },
   components: {
     Carousel,
     Slide,

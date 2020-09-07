@@ -15,15 +15,6 @@
   </md-card>
 </template>
 
-<style lang="scss" scoped>
-.movie-finder-card {
-  width: 320px;
-  margin: 4px;
-  display: inline-block;
-  vertical-align: top;
-}
-</style>
-
 <script>
 export default {
   name: 'MovieCard',
@@ -35,3 +26,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.movie-finder-card {
+  width: 320px;
+  margin: 4px;
+  display: inline-block;
+  vertical-align: top;
+}
+</style>
