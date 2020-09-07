@@ -8,7 +8,7 @@
       <md-card-area>
         <md-card-header>
           <span class="md-title">{{ item.Title }}</span>
-          <span class="md-subhead">Director: , Year: {{ item.Year }}</span>
+          <span class="md-subhead">Year: {{ item.Year }}</span>
         </md-card-header>
       </md-card-area>
     </md-card-media-cover>

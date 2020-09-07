@@ -1,24 +1,38 @@
 <template>
-  <div>
-    <md-field>
+  <div class="movie-finder">
+    <md-field @keyup.enter.native="searchMovies">
       <input class="md-input" :value="searchTerm" @input="updateSearchTerm" placeholder="Type to search movie" />
-      <md-button type="submit" class="md-primary" @click="searchMovies" :disabled="isLoading">SEARCH</md-button>
+      <span class="md-helper-text">{{ searchHelperText }}</span>
+      <md-button type="submit" class="md-primary movie-finder__search-button" @click="searchMovies" :disabled="isLoading">SEARCH</md-button>
     </md-field>
 
-    <div class="movie-finder-spinner">
-      <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" v-show="isLoading"></md-progress-spinner>
+    <div class="movie-finder__spinner" v-show="isLoading">
+      <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate"></md-progress-spinner>
     </div>
 
-    <div class="movie-finder-search-history" v-show="getResultsHistory.length">
-      <h2>History</h2>
-      <md-list>
-        <md-list-item v-for="(history, index) in getResultsHistory" :key="`${history.term}_${index}`">
-          {{ history.term }}
-          <ul>
-            <li v-for="(movie, index) in history.results" :key="`${movie}_${index}`">{{ movie.Title }}</li>
-          </ul>
-        </md-list-item>
-      </md-list>
+    <div class="movie-finder__search-history" v-show="getResultsHistory.length && !isLoading">
+      <md-table md-card>
+        <md-table-toolbar>
+          <h1 class="md-title">Search history</h1>
+        </md-table-toolbar>
+
+        <md-table-row>
+          <md-table-head>Search Term</md-table-head>
+          <md-table-head>Results</md-table-head>
+          <md-table-head>Action</md-table-head>
+        </md-table-row>
+
+        <md-table-row v-for="(history, index) in getResultsHistory" :key="`${history.term}_${index}`">
+          <md-table-cell>{{ history.term }}</md-table-cell>
+          <md-table-cell>{{ history.results.length }}</md-table-cell>
+          <md-table-cell>
+            <md-button 
+                type="submit" 
+                class="md-primary movie-finder__search-history__button" 
+                @click="showResults(history.term)">SHOW</md-button>
+          </md-table-cell>
+        </md-table-row>
+      </md-table>
     </div>
   </div>
 </template>
@@ -28,6 +42,11 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'Home',
+  data() {
+    return {
+      searchHelperText: ''
+    }
+  },
   computed: {
     ...mapState(['form']),
     searchTerm: {
@@ -53,22 +72,36 @@ export default {
       this.$store.commit('setForm', { searchTerm: e.target.value });
     },
     async searchMovies() {
-      // run spinner
-      this.$store.dispatch('addLoading', true);
-
       const term = this.form.searchTerm;
 
-      // save search term
-      this.$store.dispatch('addForm', term);
+      // check if results already found
+      if (this.getResultsHistory.length && this.getResultsHistory.find(item => item.term === term)) {
+        this.searchHelperText = 'Already found';
+      } else {
+        // run spinner
+        this.$store.dispatch('addLoading', true);
 
-      // search movies
-      const results = await this.$store.dispatch('searchMovies', term);
+        // save search term
+        this.$store.dispatch('addForm', term);
 
-      // save search result
-      this.$store.dispatch('addResultsHistory', this.getMovies);
+        // search movies
+        const results = await this.$store.dispatch('searchMovies', term);
 
-      // stop spinner
-      this.$store.dispatch('addLoading', false);
+        // save search result
+        this.$store.dispatch('addResultsHistory', this.getMovies);
+
+        // stop spinner
+        this.$store.dispatch('addLoading', false);
+
+        // navigate to the results page
+        this.$router.push({ path: 'results' });
+      }
+    },
+    showResults(term) {
+      const movies = this.getResultsHistory.find(item => item.term === term);
+
+      // show stored search results
+      this.$store.dispatch('addMoveis', movies.results);
 
       // navigate to the results page
       this.$router.push({ path: 'results' })
@@ -80,11 +113,23 @@ export default {
 }
 </script>
 
-<style scoped>
-.movie-finder-spinner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
+<style lang="scss" scoped>
+.movie-finder {
+  &__search-button {
+    margin-top: -2px;
+  }
+  &__spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+  }
+  &__search-history {
+    margin: 2rem 0;
+    
+    &__button {
+      margin-left: -24px;
+    }
+  }
 }
 </style>

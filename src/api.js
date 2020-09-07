@@ -8,7 +8,8 @@ const CONFIG = {
 const API = axios.create({
   baseURL: CONFIG.API_URL,
   params: {
-    apikey: CONFIG.API_KEY
+    apikey: CONFIG.API_KEY,
+    type: 'movie'
   }
 });
 

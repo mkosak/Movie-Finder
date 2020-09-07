@@ -3,7 +3,7 @@
     <Toolbar />
 
     <md-app>
-      <md-app-content class="movie-finder-container">
+      <md-app-content>
         <router-view></router-view>
       </md-app-content>
     </md-app>
@@ -28,7 +28,8 @@ export default {
 </script>
 
 <style lang="scss">
-.movie-finder-container {
+#app {
   height: 100vh;
+  min-width: 480px;
 }
 </style>
