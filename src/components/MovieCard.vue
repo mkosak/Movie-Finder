@@ -1,7 +1,7 @@
 <template>
-  <md-card>
+  <md-card class="movie-finder-card">
     <md-card-media-cover md-solid>
-      <md-card-media md-ratio="4:3">
+      <md-card-media md-ratio="1:1">
         <img :src="item.Poster" :alt="item.Title" />
       </md-card-media>
 
@@ -16,17 +16,22 @@
 </template>
 
 <style lang="scss" scoped>
-  .md-card {
-    width: 320px;
-    margin: 4px;
-    display: inline-block;
-    vertical-align: top;
-  }
+.movie-finder-card {
+  width: 320px;
+  margin: 4px;
+  display: inline-block;
+  vertical-align: top;
+}
 </style>
 
 <script>
 export default {
   name: 'MovieCard',
-  props: [ 'item' ]
+  props: {
+    item: {
+      type: Object,
+      required: true
+    }
+  }
 }
 </script>

@@ -84,8 +84,8 @@ const mutations = {
     state.movies = movies;
   },
   setResultsHistory(state, history) {
-    if (!history.results.lenght) return;
-    
+    if (!history.results.length) return;
+
     const results = { term: history.term, results: history.results };
     state.resultsHistory.push(results);
 

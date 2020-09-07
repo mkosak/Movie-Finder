@@ -6,7 +6,7 @@ import VueMaterial from 'vue-material';
 import VueCarousel from 'vue-carousel';
 
 import App from './App.vue';
-import routes from './routes';
+import CONFIG from './config';
 import store from './store';
 
 import 'vue-material/dist/vue-material.min.css';
@@ -20,7 +20,7 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 
 const router = new VueRouter({
-  routes,
+  routes: CONFIG.ROUTES,
   mode: 'history'
 });
 

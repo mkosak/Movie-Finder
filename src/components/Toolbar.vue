@@ -2,7 +2,9 @@
   <md-toolbar class="md-primary movie-finder-toolbar">
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start">
-        <span class="md-title">MovieFinder</span>
+        <a to="/">
+          <span class="md-title">MovieFinder</span>
+        </a>
       </div>
       <div class="md-toolbar-section-end">
         <md-button to="/">Home</md-button>
