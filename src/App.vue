@@ -20,7 +20,6 @@ export default {
   },
   computed: {
     results() {
-      console.log('results', this.$store.getters.getMovies);
       return this.$store.getters.getMovies;
     }
   }
