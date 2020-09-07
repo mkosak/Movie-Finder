@@ -56,9 +56,13 @@ const actions = {
     commit('setForm', form);
   },
   async searchMovies({ commit }, term) {
-    const res = await API.get(`?s=${term}`);
-
-    commit('setMovies', res.data.Search);
+    await API.get(`?s=${term}`).then((res) => {
+      if (res.data.Search) {
+        commit('setMovies', res.data.Search);
+      }
+    }).catch((e) => {
+      console.log('API has issues', e);
+    });
   },
   addResultsHistory({ commit, getters }, results) {
     commit('setResultsHistory', { term: getters.getSearchTerm, results });
@@ -80,6 +84,8 @@ const mutations = {
     state.movies = movies;
   },
   setResultsHistory(state, history) {
+    if (!history.results.lenght) return;
+    
     const results = { term: history.term, results: history.results };
     state.resultsHistory.push(results);
 
